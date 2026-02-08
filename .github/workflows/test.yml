@@ -1,77 +1,99 @@
-name: CI Tests
+name: OpenGov Africa CI
 
 on:
-  pull_request:
   push:
     branches: [main]
+  pull_request:
 
 jobs:
   test:
-    name: Run Tests, Lint & Validation
+    name: Code Quality & Tests
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        shell: bash
+
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Set up Python 3.10
         uses: actions/setup-python@v5
         with:
           python-version: "3.10"
           cache: "pip"
 
-      - name: Install system dependencies
+      - name: Install System Dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y tesseract-ocr ghostscript
 
-      - name: Install Python dependencies
+      - name: Install Python Dependencies
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          # Ensure dev dependencies are installed
-          pip install flake8 pytest pytest-cov jsonschema mypy
+          # Install quality tools explicitly to ensure they are available
+          pip install ruff black pytest pytest-cov jsonschema mypy
 
-      - name: Lint with flake8
+      - name: Lint with Ruff
         run: |
-          # stop the build if there are Python syntax errors or undefined names
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          # exit-zero treats all errors as warnings.
-          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+          # Strictly enforce linting rules. Fails on errors.
+          ruff check .
 
-      - name: Validate JSON Syntax
+      - name: Check Formatting with Black
         run: |
-          # Script to validate all JSON files in data/ directory
+          # Enforce code formatting. Fails if code is not formatted.
+          black --check .
+
+      - name: Type Check with Mypy
+        run: |
+          # Enforce type checking.
+          mypy . --ignore-missing-imports --install-types --non-interactive
+
+      - name: Validate JSON Data & Schemas
+        run: |
           python -c "
           import json
           import glob
           import sys
+          import os
 
-          files = glob.glob('data/**/*.json', recursive=True)
-          if not files:
-              print('No JSON files found in data/ to validate.')
-              sys.exit(0)
+          def validate_files(pattern, description):
+              files = glob.glob(pattern, recursive=True)
+              if not files:
+                  print(f'ℹ️ No files found matching {pattern} ({description})')
+                  return False
+              
+              has_error = False
+              print(f'🔍 Validating {len(files)} {description}...')
+              for filepath in files:
+                  try:
+                      with open(filepath, 'r', encoding='utf-8') as f:
+                          json.load(f)
+                      print(f'  ✅ Valid JSON: {filepath}')
+                  except json.JSONDecodeError as e:
+                      print(f'  ❌ Invalid JSON: {filepath}\n     Error: {e}')
+                      has_error = True
+                  except Exception as e:
+                      print(f'  ❌ Error reading {filepath}: {e}')
+                      has_error = True
+              return has_error
 
-          has_error = False
-          for filepath in files:
-              try:
-                  with open(filepath, 'r') as f:
-                      json.load(f)
-                  print(f'✅ Valid usage of JSON syntax: {filepath}')
-              except json.JSONDecodeError as e:
-                  print(f'❌ Invalid JSON syntax: {filepath}\n   Error: {e}')
-                  has_error = True
+          # Validate all JSON files in data/ and schemas/
+          data_errors = validate_files('data/**/*.json', 'Data Files')
+          schema_errors = validate_files('schemas/**/*.json', 'Schema Files')
 
-          if has_error:
+          if data_errors or schema_errors:
               sys.exit(1)
           "
 
-      - name: Run pytest
+      - name: Run Tests with Pytest
         run: |
-          # Check for tests first
-          if pytest --collect-only; then
-            echo "Tests found, running pytest..."
-            pytest -v --cov=./ --cov-report=term-missing
+          # Check if tests exist before running to prevent empty run failure
+          if pytest --collect-only > /dev/null 2>&1; then
+            echo "✅ Tests detected, running pytest..."
+            pytest -v --cov=. --cov-report=term-missing --cov-fail-under=70
           else
-            echo "No tests collected. Skipping pytest execution to prevent workflow failure."
+            echo "ℹ️ No tests collected. Skipping pytest execution."
           fi
