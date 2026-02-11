@@ -66,7 +66,8 @@ Each contributor is credited with the specific components, tasks, or deliverable
 
 | Contributor | Role / Focus Area | Owned Deliverables |
 |------------|------------------|--------------------|
-| Name / GitHub | Backend, Frontend, Data, Infra, Research | Clearly scoped features, services, or setup tasks |
+| Lochit-Vinay (@Lochit-Vinay) | Data / Research | Added publicly available African government budget PDFs for testing; documented official source URLs (PR #8) |
+
 
 This table must be kept up to date as the project evolves, from Phase 0 through final delivery. Phase-level credit is insufficient on its own; ownership must always be traceable to concrete deliverables, from initial scaffolding (Phase 0) through final handover.
 
