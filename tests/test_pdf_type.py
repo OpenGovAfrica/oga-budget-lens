@@ -1,3 +1,6 @@
+import pytest
+pytest.importorskip("fitz")
+
 from oga_budget_lens.pdf_type import detect_pdf_type
 
 

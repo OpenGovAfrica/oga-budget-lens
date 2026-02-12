@@ -1,102 +1,102 @@
 name: CI Pipeline
 
 on:
-    pull_request:
-        branches:
-            - main
-            - develop
-    workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
 
 jobs:
-    test:
-        name: Run Tests
-        runs-on: ubuntu-latest
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
 
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v4
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-            - name: Set up Python
-              uses: actions/setup-python@v5
-              with:
-                  python-version: "3.11"
-                  cache: "pip"
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
 
-            - name: Install dependencies
-              run: |
-                  python -m pip install --upgrade pip
-                  pip install pytest pytest-cov
-                  if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest pytest-cov
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-            - name: Run pytest
-              run: |
-                  pytest --verbose --cov=app --cov-report=term-missing --cov-report=xml || [ $? -eq 5 ]
-              continue-on-error: false
+      - name: Run pytest
+        run: |
+          pytest --verbose --cov=app --cov=src --cov-report=term-missing --cov-report=xml || [ $? -eq 5 ]
+        continue-on-error: false
 
-            - name: Upload coverage reports
-              uses: codecov/codecov-action@v4
-              if: always()
-              with:
-                  file: ./coverage.xml
-                  flags: unittests
-                  name: codecov-umbrella
-                  fail_ci_if_error: false
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v4
+        if: always()
+        with:
+          file: ./coverage.xml
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false
 
-    validate-schemas:
-        name: Validate JSON Schemas
-        runs-on: ubuntu-latest
+  validate-schemas:
+    name: Validate JSON Schemas
+    runs-on: ubuntu-latest
 
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v4
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-            - name: Set up Python
-              uses: actions/setup-python@v5
-              with:
-                  python-version: "3.11"
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
 
-            - name: Install JSON schema validator
-              run: |
-                  python -m pip install --upgrade pip
-                  pip install jsonschema check-jsonschema
+      - name: Install JSON schema validator
+        run: |
+          python -m pip install --upgrade pip
+          pip install jsonschema check-jsonschema
 
-            - name: Validate JSON schemas
-              run: |
-                  echo "Validating JSON schema files..."
+      - name: Validate JSON schemas
+        run: |
+          echo "Validating JSON schema files..."
 
-                  # Check if schemas directory exists
-                  if [ -d "schemas" ]; then
-                    echo "Found schemas directory"
-                    
-                    # Validate each JSON schema file is valid JSON and valid JSON Schema
-                    for schema_file in schemas/*.json; do
-                      if [ -f "$schema_file" ]; then
-                        echo "Validating $schema_file..."
-                        python -c "import json; import jsonschema; schema = json.load(open('$schema_file')); jsonschema.Draft7Validator.check_schema(schema); print('✓ Valid schema')"
-                      fi
-                    done
-                  else
-                    echo "No schemas directory found, skipping validation"
-                  fi
+          # Check if schemas directory exists
+          if [ -d "schemas" ]; then
+            echo "Found schemas directory"
+            
+            # Validate each JSON schema file is valid JSON and valid JSON Schema
+            for schema_file in schemas/*.json; do
+              if [ -f "$schema_file" ]; then
+                echo "Validating $schema_file..."
+                python -c "import json; import jsonschema; schema = json.load(open('$schema_file')); jsonschema.Draft7Validator.check_schema(schema); print('✓ Valid schema')"
+              fi
+            done
+          else
+            echo "No schemas directory found, skipping validation"
+          fi
 
-                  # Validate any JSON files in the data directory against schemas if they exist
-                  if [ -d "data" ] && [ -d "schemas" ]; then
-                    echo "Checking for JSON files in data directory..."
-                    for data_file in data/*.json; do
-                      if [ -f "$data_file" ]; then
-                        echo "Found JSON file: $data_file"
-                        # Validate it's valid JSON
-                        python -c "import json; json.load(open('$data_file')); print('✓ Valid JSON')"
-                      fi
-                    done
-                  fi
+          # Validate any JSON files in the data directory against schemas if they exist
+          if [ -d "data" ] && [ -d "schemas" ]; then
+            echo "Checking for JSON files in data directory..."
+            for data_file in data/*.json; do
+              if [ -f "$data_file" ]; then
+                echo "Found JSON file: $data_file"
+                # Validate it's valid JSON
+                python -c "import json; json.load(open('$data_file')); print('✓ Valid JSON')"
+              fi
+            done
+          fi
 
-            - name: Check JSON formatting
-              run: |
-                  echo "Checking JSON file formatting..."
+      - name: Check JSON formatting
+        run: |
+          echo "Checking JSON file formatting..."
 
-                  # Find all JSON files and validate they are properly formatted
-                  find . -name "*.json" -not -path "./node_modules/*" -not -path "./.git/*" | while read json_file; do
-                    echo "Checking $json_file..."
-                    python -c "import json; import sys; json.load(open('$json_file')); print('✓ Valid JSON syntax')" || exit 1
-                  done
+          # Find all JSON files and validate they are properly formatted
+          find . -name "*.json" -not -path "./node_modules/*" -not -path "./.git/*" | while read json_file; do
+            echo "Checking $json_file..."
+            python -c "import json; import sys; json.load(open('$json_file')); print('✓ Valid JSON syntax')" || exit 1
+          done

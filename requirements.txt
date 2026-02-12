@@ -6,6 +6,7 @@ uvicorn[standard]==0.27.0
 pdfplumber==0.10.3
 camelot-py[cv]==0.11.0
 pytesseract==0.3.10
+PyMuPDF==1.24.2
 
 # Data Processing
 pandas==2.1.4

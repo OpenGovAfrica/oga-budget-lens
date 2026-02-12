@@ -27,6 +27,7 @@ def check_imports():
         "langdetect",
         "pytest",
         "cv2",
+        "fitz",
     ]
     
     all_good = True

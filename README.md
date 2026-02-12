@@ -9,12 +9,14 @@ This repository is at an early stage and focuses on laying strong technical and 
 ### Why This Project Exists
 
 Across many African countries, government budgets are published as:
+
 - Scanned or poorly formatted PDFs
 - Documents with weak or inconsistent structure
 - Multi-language texts (English, French, Portuguese, and others)
 - Files that are difficult to compare across years or countries
 
 Most existing extraction approaches:
+
 - Lose links to original sources
 - Hide uncertainty or errors
 - Or rely on AI systems that infer missing fiscal data
@@ -24,15 +26,16 @@ Budget Lens takes a different approach:
 
 ### Core Principles
 
-- Provenance is non-negotiable  
-- Human verification is first-class  
-- AI assistance is constrained and auditable  
-- Ambiguity must be surfaced, not hidden  
-- Cross-country comparison is a design requirement  
+- Provenance is non-negotiable
+- Human verification is first-class
+- AI assistance is constrained and auditable
+- Ambiguity must be surfaced, not hidden
+- Cross-country comparison is a design requirement
 
 ### What This Repository Contains
 
 This repository will evolve to include:
+
 - A provenance-aware parsing pipeline for budget PDFs
 - A canonical budget line item data model
 - Validation and quality assurance tooling
@@ -40,6 +43,7 @@ This repository will evolve to include:
 - Standardized export formats for reuse
 
 At present, the repository focuses on:
+
 - Architecture and data model design
 - Defining safety and trust constraints
 - Preparing for initial implementation work
@@ -51,6 +55,7 @@ At present, the repository focuses on:
 - Active design and early implementation phase
 
 Early contributors will help define:
+
 - Core schemas
 - Tooling choices
 - Validation rules
@@ -67,6 +72,8 @@ Each contributor is credited with the specific components, tasks, or deliverable
 | Contributor | Role / Focus Area | Owned Deliverables |
 |------------|------------------|--------------------|
 | Name / GitHub | Backend, Frontend, Data, Infra, Research | Clearly scoped features, services, or setup tasks |
+| Divyanshu-Off | Infra | CI/CD pipeline for the project |
+| Divyanshu-Off | Backend, Infra | Containerization of parsing environment (Docker & Compose), FastAPI scaffolding, and contributor documentation |
 
 This table must be kept up to date as the project evolves, from Phase 0 through final delivery. Phase-level credit is insufficient on its own; ownership must always be traceable to concrete deliverables, from initial scaffolding (Phase 0) through final handover.
 
@@ -90,10 +97,11 @@ A task or feature is considered complete only when all of the following are sati
 
 ### Relationship to Tech Programs, Hackathons & Internships
 
-This project may be developed in part through tech programs. If you are contributing through GSoC, MLH, Outreachy etc, please find your [project standard here](https://github.com/OpenGovAfrica/gsoc/blob/main/docs/project-standard.md) & roadmap [here](https://github.com/OpenGovAfrica/gsoc/issues/20). 
+This project may be developed in part through tech programs. If you are contributing through GSoC, MLH, Outreachy etc, please find your [project standard here](https://github.com/OpenGovAfrica/gsoc/blob/main/docs/project-standard.md) & roadmap [here](https://github.com/OpenGovAfrica/gsoc/issues/20).
 _If this becomes obselete please raise an issue for_
 
 Contributors are expected to:
+
 - Build reusable, well-documented components
 - Respect long-term maintenance needs
 - Treat programs as an entry point, not a finish line
@@ -126,6 +134,7 @@ Clear ownership is required for all phases to ensure sustainability, accountabil
 ### Repository Structure (Evolving)
 
 Expected top-level documents include:
+
 - `TECHNICAL_OVERVIEW.md`
 - `ROADMAP.md`
 - `CONTRIBUTING.md`
@@ -187,6 +196,7 @@ See `CONTRIBUTING.md` for details.
 This project is maintained under the OpenGovAfrica ecosystem.
 
 Design decisions are expected to:
+
 - Be documented
 - Favor clarity over cleverness
 - Support reuse by journalists, researchers, and civic technologists

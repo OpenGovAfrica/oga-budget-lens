@@ -1,0 +1,20 @@
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/data
+    environment:
+      - DATA_DIR=/data
+    restart: always
+
+  pipeline:
+    build: .
+    volumes:
+      - ./data:/data
+    environment:
+      - DATA_DIR=/data
+    command: ["python", "app/pipelines/batch.py", "/data/samples"]
+    profiles:
+      - pipeline
