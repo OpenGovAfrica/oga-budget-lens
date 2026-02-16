@@ -10,6 +10,7 @@ PyMuPDF==1.25.1
 
 # Data Processing
 pandas==2.2.3
+numpy<2.0
 
 # Language Detection
 langdetect==1.0.9
