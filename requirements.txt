@@ -6,10 +6,11 @@ uvicorn[standard]==0.27.0
 pdfplumber==0.10.3
 camelot-py==0.11.0
 pytesseract==0.3.10
-PyMuPDF==1.24.2
+PyMuPDF==1.25.1
 
 # Data Processing
-pandas==2.1.4
+pandas==2.2.3
+numpy<2.0
 
 # Language Detection
 langdetect==1.0.9
@@ -20,7 +21,7 @@ pytest-cov==4.1.0
 
 # Development Tools
 black==24.1.1
-flake8==7.0.0
+ruff==0.3.5
 
 # Additional Dependencies for Camelot
 opencv-python==4.9.0.80
