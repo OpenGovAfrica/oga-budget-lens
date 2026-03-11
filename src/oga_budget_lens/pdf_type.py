@@ -52,3 +52,21 @@ def detect_pdf_type(path: str, max_pages: int = 5) -> dict:
         "pdf_type": pdf_type,
         "text_page_ratio": round(ratio, 2),
     }
+
+def detect_page_type(page) -> str:
+    """
+    Detect whether a single page is digital or scanned.
+    Returns: "digital" or "ocr"
+    """
+
+    text = page.get_text().strip()
+
+    has_text = (
+        len(text.split()) > 10
+        and any(c.isalpha() for c in text)
+    )
+
+    if has_text:
+        return "digital"
+    else:
+        return "ocr"
