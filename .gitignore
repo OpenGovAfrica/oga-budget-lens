@@ -1,9 +1,17 @@
 # Virtual environment
 .venv/
-venv
+venv/
+
 # Python cache
 __pycache__/
 .pytest_cache/
 
 # OS / editor noise
 .DS_Store
+
+# Generated pipeline artifacts
+data/intermediate/
+
+# Ignore data files
+data/
+*.pdf
