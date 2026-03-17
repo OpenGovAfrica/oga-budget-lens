@@ -22,12 +22,15 @@ def check_imports():
         "uvicorn",
         "pdfplumber",
         "camelot",
-        "pytesseract",
         "pandas",
         "langdetect",
         "pytest",
         "cv2",
         "fitz",
+    ]
+    
+    optional_packages = [
+        "pytesseract",  # Requires system tesseract-ocr to be installed
     ]
     
     all_good = True
@@ -38,6 +41,15 @@ def check_imports():
         except ImportError:
             print(f"✗ {package} failed to import")
             all_good = False
+    
+    print()
+    print("Optional dependencies (require system libs):")
+    for package in optional_packages:
+        try:
+            __import__(package)
+            print(f"✓ {package} imported successfully (system dependency available)")
+        except ImportError:
+            print(f"⊘ {package} requires system tesseract-ocr (skipped if not needed)")
     
     return all_good
 
