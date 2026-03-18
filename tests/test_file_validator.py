@@ -1,6 +1,10 @@
 import pytest
-from app.validation.file_validator import validate_file, FileValidationError
+import sys
+import os
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+from app.validation.file_validator import validate_file, FileValidationError
 
 def test_valid_pdf_file():
     result = validate_file("budget.pdf")
