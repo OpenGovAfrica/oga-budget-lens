@@ -11,3 +11,7 @@ __pycache__/
 
 # Generated pipeline artifacts
 data/intermediate/
+
+# Ignore data files
+data/
+*.pdf
