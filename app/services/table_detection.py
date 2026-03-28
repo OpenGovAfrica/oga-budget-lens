@@ -1,9 +1,32 @@
 class TableDetector:
+
     def __init__(self, y_threshold=10):
         self.y_threshold = y_threshold
+
+    def split_into_tables(self, rows):
+        if not rows:
+            return []
+        tables = []
+        current_table = [rows[0]]
+        for i in range(1, len(rows)):
+            prev_row = rows[i - 1]
+            curr_row = rows[i]
+            prev_y = sum(t["y1"] for t in prev_row) / len(prev_row)
+            curr_y = sum(t["y0"] for t in curr_row) / len(curr_row)
+            gap = abs(curr_y - prev_y)
+            # Heuristic: large vertical gap likely indicates new table boundary
+            if gap > self.y_threshold * 3:
+                tables.append(current_table)
+                current_table = [curr_row]
+            else:
+                current_table.append(curr_row)
+        if current_table:
+            tables.append(current_table)
+        return tables
     def get_y_center(self, token):
         return (token["y0"] + token["y1"]) / 2
     def group_rows(self, tokens):
+        # Group tokens into rows using vertical proximity
         tokens = sorted(tokens, key=lambda t: self.get_y_center(t))
         rows = []
         current_row = []
@@ -58,27 +81,26 @@ class TableDetector:
                 "page_number": page_data["page_number"],
                 "tables": []
             }
-        table = self.build_table(rows)
-        avg_cols = sum(len(r) for r in table) / len(table)
-        inconsistent_rows = sum(
-            1 for r in table if abs(len(r) - avg_cols) > 2
-        )
-        if inconsistent_rows > len(table) * 0.5:
-            return {
-                "page_number": page_data["page_number"],
-                "tables": []
-            }
-        long_rows = sum(1 for r in table if len(r) > 8)
-        if long_rows > len(table) * 0.5:
-            return {
-                "page_number": page_data["page_number"],
-                "tables": []
-            }
+        # Split rows into separate tables
+        table_groups = self.split_into_tables(rows) # groups of rows per table
+        tables = []
+        for group in table_groups:
+            if len(group) < 2:
+                continue
+            table = self.build_table(group)
+            if not table:
+                continue
+            avg_cols = sum(len(r) for r in table) / len(table)
+            inconsistent_rows = sum(
+                1 for r in table if abs(len(r) - avg_cols) > 2
+            )
+            if inconsistent_rows > len(table) * 0.5:
+                continue
+            long_rows = sum(1 for r in table if len(r) > 8)
+            if long_rows > len(table) * 0.5:
+                continue
+            tables.append({"rows": table})
         return {
             "page_number": page_data["page_number"],
-            "tables": [
-                {
-                    "rows": table
-                }
-            ]
+            "tables": tables
         }

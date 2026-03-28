@@ -3,8 +3,8 @@ import sys
 import json
 import traceback
 
-from oga_budget_lens.pdf_type import detect_pdf_type
-from oga_budget_lens.text_extraction import extract_text_pipeline
+from src.oga_budget_lens.pdf_type import detect_pdf_type
+from src.oga_budget_lens.text_extraction import extract_text_pipeline
 from app.services.table_detection import TableDetector
 
 

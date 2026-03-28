@@ -2,7 +2,7 @@ import fitz
 import json
 import logging
 from pathlib import Path
-from oga_budget_lens.pdf_type import detect_page_type
+from src.oga_budget_lens.pdf_type import detect_page_type
 logger = logging.getLogger(__name__)
 def save_raw_artifact(data, pdf_path, page_number, method):
     base = Path(pdf_path).stem
