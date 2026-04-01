@@ -36,7 +36,11 @@
             ],
             [
               "www.treasury.go.ke"
-            ],
+            ]
+          ]
+        },
+        {
+          "rows": [
             [
               "BUDGET"
             ],
@@ -46,26 +50,6 @@
             [
               "FY",
               "2023/24"
-            ],
-            [
-              "Theme:",
-              "\u201cBottom-Up",
-              "Economic",
-              "Transformation",
-              "and",
-              "Climate"
-            ],
-            [
-              "Change",
-              "Mitigation",
-              "/Adaptation",
-              "for",
-              "Improved",
-              "Livelihoods",
-              "of"
-            ],
-            [
-              "Kenyans\u201d"
             ]
           ]
         }

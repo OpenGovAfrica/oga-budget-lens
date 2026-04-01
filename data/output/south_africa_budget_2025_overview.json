@@ -17,7 +17,11 @@
             [
               "21MAY",
               "2025"
-            ],
+            ]
+          ]
+        },
+        {
+          "rows": [
             [
               "Budget"
             ],
@@ -26,7 +30,11 @@
             ],
             [
               "\u2014\u2014\u2014_"
-            ],
+            ]
+          ]
+        },
+        {
+          "rows": [
             [
               "national",
               "treasury",
@@ -55,7 +63,20 @@
     },
     {
       "page_number": 3,
-      "tables": []
+      "tables": [
+        {
+          "rows": [
+            [
+              "ISBN:",
+              "978-1-77997-931-5"
+            ],
+            [
+              "RP:",
+              "211/2025"
+            ]
+          ]
+        }
+      ]
     },
     {
       "page_number": 4,
@@ -67,7 +88,20 @@
     },
     {
       "page_number": 6,
-      "tables": []
+      "tables": [
+        {
+          "rows": [
+            [
+              "Dr",
+              "Duncan",
+              "Pieterse"
+            ],
+            [
+              "Director-General"
+            ]
+          ]
+        }
+      ]
     },
     {
       "page_number": 7,
